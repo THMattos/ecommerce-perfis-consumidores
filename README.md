@@ -150,4 +150,4 @@ jupyter notebook ecommerce_perfis_consumidores.ipynb
 ## 👤 Autor
 
 **Thiago de Mattos**: Estudante de Engenharia de Software | Analista de Dados
-🔗 LinkedIn: `<https://www.linkedin.com/in/thiago-demattos-rj/>` · 💻 GitHub: `<https://github.com/THMattos>`
+🔗 [LinkedIn](https://www.linkedin.com/in/thiago-demattos-rj/) · 💻 [GitHub](https://github.com/THMattos)
