@@ -72,36 +72,56 @@ KPIs (clientes, pedidos, receita, ticket por pedido), distribuição das variáv
 
 ## 📊 Resultados
 
-<!--
-ATENÇÃO: preencha os campos [[...]] com a saída da última célula do notebook
-("Resumo automático dos resultados") e apague este comentário antes de publicar.
--->
+### Funil de limpeza
+
+| Etapa | Linhas removidas | Linhas restantes |
+|---|---:|---:|
+| Base original | 0 | 541.909 |
+| Sem `CustomerID` | 135.080 | 406.829 |
+| Cancelamentos (`InvoiceNo` com "C") | 8.905 | 397.924 |
+| `Quantity ≤ 0` ou `UnitPrice ≤ 0` | 40 | 397.884 |
+| Frete, taxas e ajustes (não produto) | 1.547 | 396.337 |
+| Compras depois canceladas | 5.307 | 391.030 |
+| Duplicatas exatas | 5.101 | **385.929** (71,2% da original) |
+
+### KPIs
+
+| KPI | Valor |
+|---|---|
+| Período analisado | 29/11/2018 a 07/12/2019 |
+| Clientes únicos | 4.321 |
+| Pedidos únicos | 18.162 |
+| Receita total (US$) | 8.199.423,90 |
+| Ticket médio por pedido (US$) | 451,46 (mediana: 299,85) |
 
 ![Receita mensal](images/receita_mensal.png)
 ![Receita diária](images/receita_diaria.png)
 ![Top 10 produtos](images/top10_produtos.png)
 ![Segmentos de clientes](images/segmentos_clientes.png)
 
-| KPI | Valor |
-|---|---|
-| Período analisado | [[período]] |
-| Clientes únicos | [[clientes]] |
-| Pedidos únicos | [[pedidos]] |
-| Receita total (US$) | [[receita]] |
-| Ticket médio por pedido (US$) | [[ticket médio]] |
-
 ### Principais insights
 
-1. **Sazonalidade:** [[descreva o padrão mensal observado no gráfico de receita e o mês de maior receita]].
-2. **Concentração de produtos:** os 10 maiores itens concentram [[x%]] da receita; os líderes são [[item 1]], [[item 2]] e [[item 3]].
-3. **Concentração de clientes:** clientes com 10+ pedidos representam [[x%]] da base e [[y%]] da receita; clientes de 1 pedido representam [[x%]] da base e [[y%]] da receita.
-4. **Teste de hipótese:** [[copie a conclusão automática para gasto_total e ticket_medio, incluindo p-valores e d de Cohen]].
+1. **Sazonalidade:** a receita cresce no segundo semestre e atinge o pico em **novembro de 2019 (US$ 1.133.700,10)**, com setembro a novembro acima de US$ 860 mil por mês. Novembro de 2018 e dezembro de 2019 estão incompletos na base.
+2. **Produtos pulverizados:** entre 3.644 itens, os 10 maiores concentram apenas **7,8% da receita**. Os líderes são *Regency Cakestand 3 Tier* (US$ 134.365,30), *White Hanging Heart T-Light Holder* (US$ 88.895,90) e *Jumbo Bag Red Retrospot* (US$ 79.649,80).
+3. **Clientes concentrados:** quem fez **10+ pedidos é 8,7% da base, mas gera 52,1% da receita**. Já os clientes de **1 pedido são 34,9% da base e geram só 6,6%**.
+
+| Segmento | % clientes | % receita | Ticket médio (US$) |
+|---|---:|---:|---:|
+| 1 pedido | 34,9% | 6,6% | 359,96 |
+| 2-3 pedidos | 30,9% | 13,4% | 346,03 |
+| 4-9 pedidos | 25,5% | 27,9% | 370,29 |
+| 10+ pedidos | 8,7% | 52,1% | 498,63 |
+
+4. **Teste de hipótese (recorrentes: n = 2.815 · compra única: n = 1.506):**
+   - **`gasto_total`:** recorrentes gastam significativamente mais (Welch p < 0,001; Mann-Whitney p < 0,001), com **efeito pequeno (d = 0,29)**. Mediana de US$ 1.125,28 contra US$ 252,26. Como esperado, essa métrica favorece os recorrentes por construção.
+   - **`ticket_medio`:** **evidência mista**. O Welch não é significativo (p = 0,136), o Mann-Whitney é (p < 0,001), e o **efeito é desprezível (d = 0,04)**. Mediana de US$ 297,97 contra US$ 252,26.
+   - **Conclusão:** clientes recorrentes geram mais receita porque **compram mais vezes**, não porque gastam muito mais **em cada pedido**.
 
 ### Recomendações para o marketing
-- **Fidelização:** programa para o segmento de maior frequência, que concentra [[y%]] da receita.
-- **Conversão da 2ª compra:** campanhas pós-compra para clientes de 1 pedido ([[x%]] da base).
-- **Calendário:** concentrar estoque e mídia nos meses de maior receita.
-- **Cadastro:** estimular identificação no checkout, já que ~25% das linhas originais não têm cliente.
+- **Fidelização:** programa para os 8,7% de clientes com 10+ pedidos, que concentram 52,1% da receita.
+- **Conversão da 2ª compra:** campanhas pós-compra para os clientes de 1 pedido (34,9% da base). Como o ticket por pedido é parecido entre os grupos, o ganho está em **aumentar a frequência**.
+- **Calendário:** concentrar estoque e mídia entre setembro e novembro.
+- **Cadastro:** estimular a identificação no checkout, já que ~25% das linhas originais não têm cliente.
 
 ---
 
@@ -110,6 +130,7 @@ ATENÇÃO: preencha os campos [[...]] com a saída da última célula do noteboo
 - O pareamento compra × cancelamento exige mesmo cliente, item e quantidade; devoluções parciais não são capturadas.
 - Os cortes de frequência (1, 2-3, 4-9, 10+) são uma escolha de negócio.
 - O teste compara grupos observados: **correlação, não causalidade**.
+- **Datas:** a base do bootcamp parece derivar do dataset público *Online Retail* (UCI, 2010–2011), com as datas deslocadas para 2018–2019.
 - **Próximos passos:** segmentação RFM, clusterização (K-Means), análise de cohort/retenção e dashboard interativo.
 
 ---
@@ -129,7 +150,7 @@ ecommerce-perfis-consumidores/
 ## 🚀 Como Executar
 
 ```bash
-git clone https://github.com/<seu-usuario>/ecommerce-perfis-consumidores.git
+git clone https://github.com/THMattos/ecommerce-perfis-consumidores.git
 cd ecommerce-perfis-consumidores
 
 python -m venv .venv
